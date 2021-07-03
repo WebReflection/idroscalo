@@ -48,8 +48,10 @@ const hydrate = (root, targets, overrides) => {
           }
           const asArray = isArray(info);
           const args = [type].concat(asArray ? info : [info, false]);
+          let notOnce = true;
           if (asArray) {
             if (typeof args[2] === 'object' && args[2].once) {
+              notOnce = !notOnce;
               let set = once.get(element);
               if (!set)
                 once.set(element, set = new Set);
@@ -59,7 +61,7 @@ const hydrate = (root, targets, overrides) => {
             }
           }
           element.addEventListener.apply(element, args);
-          if (!once.has(element))
+          if (notOnce)
             listeners.push({e: element, a: args});
         }
       }

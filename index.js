@@ -69,9 +69,11 @@ self.idroscalo = (function (exports) {
 
             var asArray = isArray(info);
             var args = [type].concat(asArray ? info : [info, false]);
+            var notOnce = true;
 
             if (asArray) {
               if (_typeof(args[2]) === 'object' && args[2].once) {
+                notOnce = !notOnce;
                 var set = once.get(element);
                 if (!set) once.set(element, set = new Set());
                 if (set.has(args[1])) continue;
@@ -80,7 +82,7 @@ self.idroscalo = (function (exports) {
             }
 
             element.addEventListener.apply(element, args);
-            if (!once.has(element)) listeners.push({
+            if (notOnce) listeners.push({
               e: element,
               a: args
             });
